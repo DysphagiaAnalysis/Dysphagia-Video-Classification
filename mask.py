@@ -28,7 +28,7 @@ class area:
         self.masks = self.get_masks()  # T*W*H
         self.all_frame_area_in_cm2 = self.get_all_frame_area()  # T*1
 
-    # TODO
+    # DONE
     def get_masks(self):
         mask_dir = glob.glob(self.mask_folder_path)
         mask_dir.sort()
@@ -57,10 +57,18 @@ class area:
             - self.all_frame_area_in_cm2[frame_s - self.start]
         ) / self.all_frame_area_in_cm2[frame_l - self.start]
 
-    # TODO
-    def find_min_or_max_extreme_area(self):
-        # max_value = np.max(data)
-        pass
+    # DONE
+    def find_min_or_max_extreme_area(self, flag):
+        if flag == "max":
+            return (
+                np.max(self.all_frame_area_in_cm2),
+                np.argmax(self.all_frame_area_in_cm2) + self.start
+            )
+        if flag == "min":
+            return (
+                np.min(self.all_frame_area_in_cm2),
+                np.argmin(self.all_frame_area_in_cm2) + self.start
+            )
 
 
 if __name__ == "__main__":
@@ -71,12 +79,19 @@ if __name__ == "__main__":
     r_c = read_excel.clip_info(r_e.df_excel, clip_name)
 
     a = area(r_e.df_excel, clip_name)
-    gh_onset, gh_maximum = (
+    ghr, ghm = (
         int(r_c.df_clip["GHR"].iloc[0]),
         int(r_c.df_clip["GHM"].iloc[0]),
     )
-    gh_onset_area = a.frame_area(gh_onset)
-    gh_maximum_area = a.frame_area(gh_maximum)
-    cal_percentage = a.percentage(gh_maximum, gh_onset)
-    print(gh_onset, gh_maximum_area, cal_percentage)
+    ghr_area = a.frame_area(ghr)
+    ghm_area = a.frame_area(ghm)
+    anno_percentage = a.percentage(ghm, ghr)
+    gh_maximum_area_cal, gh_maximum_cal = a.find_min_or_max_extreme_area("max")
+    gh_minimum_area_cal, gh_minimum_cal = a.find_min_or_max_extreme_area("min")
+    cal_percentage = a.percentage(gh_minimum_cal, gh_maximum_cal)
+    print("area: anno vs. cal")
+    print(ghr_area, ghm_area, anno_percentage)
+    print(gh_maximum_area_cal, gh_minimum_area_cal, cal_percentage)
+    print("frame number: anno vs. cal")
+    print(ghr, ghm, gh_maximum_cal, gh_minimum_cal)
 

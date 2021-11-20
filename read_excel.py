@@ -3,12 +3,12 @@ import pandas as pd
 
 class r_excel:
     def __init__(self, excel_name):
-        self.excel_file = excel_name
+        self.excel_file = "data/" + excel_name
         self.df_excel = self.excel2df()
 
     def excel2df(self):
-        cols = pd.read_excel(self.excel_file).iloc[0].to_numpy()
-        df = pd.read_excel(self.excel_file, header=None, skiprows=2)
+        cols = pd.read_excel(self.excel_file, header=None).iloc[0].to_numpy()
+        df = pd.read_excel(self.excel_file, header=None)
         df.columns = cols
         return df
 
@@ -28,13 +28,22 @@ class clip_info:
         return ss, se
 
     def hyoid_info(self):
-        h_onset = int(self.df_clip["HBR"].iloc[0][0])
-        h_maximum = int(self.df_clip["HBM"].iloc[0][0])
-        h_offset = int(self.df_clip["HBOS"].iloc[0][0])
-        h_on = h_onset - self.zero_frame + 1
-        h_m = h_maximum - self.zero_frame + 1
-        h_off = h_offset - self.zero_frame + 1
-        return h_on, h_m, h_off
+        hb_onset = int(self.df_clip["HBR"].iloc[0])
+        hb_maximum = int(self.df_clip["HBM"].iloc[0])
+        hb_offset = int(self.df_clip["HBOS"].iloc[0])
+        hb_on = hb_onset - self.zero_frame + 1
+        hb_m = hb_maximum - self.zero_frame + 1
+        hb_off = hb_offset - self.zero_frame + 1
+        return hb_on, hb_m, hb_off
+
+    def gh_info(self):
+        gh_onset = int(self.df_clip["GHR"].iloc[0])
+        gh_maximum = int(self.df_clip["GHM"].iloc[0])
+        gh_offset = int(self.df_clip["GHRE"].iloc[0])
+        gh_on = gh_onset - self.zero_frame + 1
+        gh_m = gh_maximum - self.zero_frame + 1
+        gh_off = gh_offset - self.zero_frame + 1
+        return gh_on, gh_m, gh_off
 
 
 if __name__ == "__main__":
@@ -46,4 +55,5 @@ if __name__ == "__main__":
     c1 = clip_info(df, clip_name)
     print(c1.swallow_info())
     print(c1.hyoid_info())
+    print(c1.gh_info())
 

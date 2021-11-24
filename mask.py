@@ -1,8 +1,6 @@
-from re import L
 from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
-from numpy.core.fromnumeric import clip
 import read_excel
 import glob
 import os
@@ -77,7 +75,8 @@ if __name__ == "__main__":
     r_e = read_excel.r_excel(excel_name)
 
     clip_names = []
-    with open("GH_E_list.txt") as file:
+    data_list = "GH_E_list.txt"
+    with open(data_list) as file:
         clip_names = file.readlines()
         clip_names = [clip.rstrip() for clip in clip_names]
 

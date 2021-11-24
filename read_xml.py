@@ -1,5 +1,62 @@
 import read_excel 
 
+import os 
+from xml.etree import ElementTree
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d.axes3d import Axes3D
+
+file_name = 'annotations.xml'
+full_file = os.path.abspath(file_name)
+mytree = ElementTree.parse(file_name)
+myroot = mytree.getroot()
+first_point = myroot[2][0].attrib['points'].split(',')
+first_x, first_y = float(first_point[0]), float(first_point[1])
+frame_tot = len(myroot[2])
+pts_x_lst = []
+pts_y_lst = []
+frames_lst = []
+count = 0
+for i in myroot[2]:
+    frame = float(i.attrib['frame'])
+    point = i.attrib['points'].split(',')
+    x = float(point[0]) - first_x
+    y = float(point[1]) - first_y
+    pts_x_lst.append(x)
+    pts_y_lst.append(y)
+    frames_lst.append(frame)
+
+    pts_x = np.array(pts_x_lst)
+    pts_y = np.array(pts_y_lst)
+    frames = np.array(frames_lst)
+    
+    fig = plt.figure()    
+    ax = fig.add_subplot(111,projection = '3d')
+
+    ax.set_xlim(-50,20)
+    ax.set_ylim(0,frame_tot)
+    ax.set_zlim(30, -30)
+    ax.set_xlabel('X')
+    ax.set_ylabel('frames')
+    ax.set_zlabel('Y')
+    ax.view_init(elev=10, azim=270)
+
+    ax.scatter(pts_x, frames, pts_y)
+    plt.savefig('plot%d'% count)
+    count += 1
+
+
+
+    
+'''
+print(myroot.tag)
+print(myroot[2].tag)
+print(myroot[2].attrib)
+for x in myroot[2]:
+    print( x.attrib['frame'], x.attrib['points'])
+'''
+
+
 
 if __name__ == '__main__':
 

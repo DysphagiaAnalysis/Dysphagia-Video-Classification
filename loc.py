@@ -6,11 +6,11 @@ import math
 
 
 class loc:
-    def __init__(self, df_excel, clip_name):
+    def __init__(self, folder, df_excel, clip_name):
         self.c = util_read_excel.clip_info(df_excel, clip_name)
         self.clip_name = clip_name
 
-        data_dir = os.path.join(os.path.abspath(os.getcwd()), "HB_Anno", "*")
+        data_dir = os.path.join(os.path.abspath(os.getcwd()), folder, "*")
         data_file_names = glob.glob(data_dir)
         for loc_file_dir in data_file_names:
             if self.clip_name in loc_file_dir:
@@ -28,45 +28,52 @@ class loc:
     # DONE
     def get_HB(self):
         HB_CSV = os.path.join(self.loc_folder_path, "HB.csv")
-        return pd.read_csv(HB_CSV, header=None)
+        return pd.read_csv(HB_CSV, header=0)
 
     # DONE
     def get_Mandible(self):
         all_files = os.path.join(self.loc_folder_path, "*")
         names_for_check = glob.glob(all_files)
-        if "M.csv" not in names_for_check:
-            return None
-        else:
-            M_CSV = os.path.join(self.loc_folder_path, "M.csv")
-            return pd.read_csv(M_CSV, header=None)
+        for name_check in names_for_check:
+            if "M.csv" in name_check:
+                return pd.read_csv(name_check, header=0)
+        return None
 
     # DONE
     # 500 pixels -> 10 cm; 50 pixels-> 1cm
     def cal_max_displacement(self):
-        onset_x, onset_y = self.df_hb.iloc[self.hbr]
-        maximum_x, maximum_y = self.df_hb.iloc[self.hbm]
+        onset = self.df_hb.loc[self.df_hb["frame"] == self.hbr]
+        onset_x, onset_y = float(onset["x"]), float(onset["y"])
+        maximum = self.df_hb.loc[self.df_hb["frame"] == self.hbm]
+        maximum_x, maximum_y = float(maximum["x"]), float(maximum["y"])
         return math.sqrt((onset_x - maximum_x) ** 2 + (onset_y - maximum_y) ** 2) / 50
 
     # DONE
     def cal_relative_loc(self, timestamp="hbr"):
-        if not self.df_mandible:
+        if self.df_mandible is None:
             return None
         if timestamp == "hbr":
-            x, y = self.df_hb.iloc[self.hbr]
-            ref_x, ref_y = self.df_mandible.iloc[self.hbr]
+            loc = self.df_hb.loc[self.df_hb["frame"] == self.hbr]
+            ref_loc = self.df_mandible.loc[self.df_mandible["frame"] == self.hbr]
         elif timestamp == "hbm":
-            x, y = self.df_hb.iloc[self.hbm]
-            ref_x, ref_y = self.df_mandible.iloc[self.hbm]
+            loc = self.df_hb.loc[self.df_hb["frame"] == self.hbm]
+            ref_loc = self.df_mandible.loc[self.df_mandible["frame"] == self.hbm]
+        x, y = float(loc["x"]), float(loc["y"])
+        ref_x, ref_y = float(ref_loc["x"]), float(ref_loc["y"])
         return math.sqrt((x - ref_x) ** 2 + (y - ref_y) ** 2) / 50
 
     # DONE
     def cal_delta_percentage(self, axis="x"):  # in x or y axis
-        if not self.df_mandible:
+        if self.df_mandible is None:
             return None
-        x_hbr, y_hbr = self.df_hb.iloc[self.hbr]
-        x_hbm, y_hbm = self.df_hb.iloc[self.hbm]
-        x_hbr_ref, y_hbr_ref = self.df_mandible.iloc[self.hbr]
-        x_hbm_ref, y_hbm_ref = self.df_mandible.iloc[self.hbm]
+        loc_hbr = self.df_hb.loc[self.df_hb["frame"] == self.hbr]
+        x_hbr, y_hbr = float(loc_hbr["x"]), float(loc_hbr["y"])
+        loc_hbm = self.df_hb.loc[self.df_hb["frame"] == self.hbm]
+        x_hbm, y_hbm = float(loc_hbm["x"]), float(loc_hbm["y"])
+        loc_ref_hbr = self.df_mandible.loc[self.df_mandible["frame"] == self.hbr]
+        x_hbr_ref, y_hbr_ref = float(loc_ref_hbr["x"]), float(loc_ref_hbr["y"])
+        loc_ref_hbm = self.df_mandible.loc[self.df_mandible["frame"] == self.hbm]
+        x_hbm_ref, y_hbm_ref = float(loc_ref_hbm["x"]), float(loc_ref_hbm["y"])
         if axis == "x":
             hbr_relative, hbm_relative = x_hbr - x_hbr_ref, x_hbm - x_hbm_ref
         elif axis == "y":
@@ -76,12 +83,16 @@ class loc:
     # DONE
     # theta(HBM - M) - theta(M - HBR)
     def cal_angle_in_degree(self):
-        if not self.df_mandible:
+        if self.df_mandible is None:
             return None
-        x_hbr, y_hbr = self.df_hb.iloc[self.hbr]
-        x_hbm, y_hbm = self.df_hb.iloc[self.hbm]
-        x_hbr_ref, y_hbr_ref = self.df_mandible.iloc[self.hbr]
-        x_hbm_ref, y_hbm_ref = self.df_mandible.iloc[self.hbm]
+        loc_hbr = self.df_hb.loc[self.df_hb["frame"] == self.hbr]
+        x_hbr, y_hbr = float(loc_hbr["x"]), float(loc_hbr["y"])
+        loc_hbm = self.df_hb.loc[self.df_hb["frame"] == self.hbm]
+        x_hbm, y_hbm = float(loc_hbm["x"]), float(loc_hbm["y"])
+        loc_ref_hbr = self.df_mandible.loc[self.df_mandible["frame"] == self.hbr]
+        x_hbr_ref, y_hbr_ref = float(loc_ref_hbr["x"]), float(loc_ref_hbr["y"])
+        loc_ref_hbm = self.df_mandible.loc[self.df_mandible["frame"] == self.hbm]
+        x_hbm_ref, y_hbm_ref = float(loc_ref_hbm["x"]), float(loc_ref_hbm["y"])
         theta1 = math.atan((y_hbm - y_hbm_ref) / (x_hbm - x_hbm_ref)) * 180 / math.pi
         theta2 = math.atan((y_hbr - y_hbr_ref) / (x_hbr - x_hbr_ref)) * 180 / math.pi
         return theta1 - theta2
@@ -89,44 +100,58 @@ class loc:
 
 if __name__ == "__main__":
 
+    folder = "HB_Anno_D/"
     excel_name = "D.xlsx"
-    r = util_read_excel.r_excel(excel_name)
+    data_list = "GH_list_D.txt"
+
+    r = util_read_excel.r_excel(folder, excel_name)
     df = r.df_excel
 
     clip_names = []
-    data_list = "GH_E_list.txt"
     with open(data_list) as file:
         clip_names = file.readlines()
         clip_names = [clip.rstrip() for clip in clip_names]
 
     clip = []
-    onset2max = []
-    max2offset = []
+    max_displacement = []
+    relative_loc_hbr = []
+    relative_loc_hbm = []
+    percentage_x = []
+    percentage_y = []
+    theta_in_degree = []
 
-    for i in range(len(names)):
-        name = names[i]
-        c = read_excel.clip_info(df, name)
-        h_onset, h_maximum, h_offset = c.hyoid_info()
-        print(name, h_onset, h_maximum, h_offset)
-        file_dir = os.path.join(os.path.abspath(os.getcwd()), folder, name + ".csv")
-        clip_df = pd.read_csv(file_dir, header=None)
-        onset_x, onset_y = clip_df.iloc[h_onset]
-        maximum_x, maximum_y = clip_df.iloc[h_maximum]
-        offset_x, offset_y = clip_df.iloc[h_offset]
+    for clip_name in clip_names:
+        l = loc(folder, df, clip_name)
 
-        dis1 = (
-            math.sqrt((onset_x - maximum_x) ** 2 + (onset_y - maximum_y) ** 2) / 30.78
-        )
-        dis2 = (
-            math.sqrt((offset_x - maximum_x) ** 2 + (offset_y - maximum_y) ** 2) / 30.78
-        )
-        clip.append(name)
-        onset2max.append(dis1)
-        max2offset.append(dis2)
+        clip.append(clip_name)
+        max_displacement.append(l.cal_max_displacement())
+        relative_loc_hbr.append(l.cal_relative_loc())
+        relative_loc_hbm.append(l.cal_relative_loc(timestamp="hbm"))
+        percentage_x.append(l.cal_delta_percentage())
+        percentage_y.append(l.cal_delta_percentage(axis="y"))
+        theta_in_degree.append(l.cal_angle_in_degree())
 
-    dis_df = pd.DataFrame(
-        list(zip(clip, onset2max, max2offset)),
-        columns=["clip", "onset2max", "max2offset"],
+    df_loc = pd.DataFrame(
+        list(
+            zip(
+                clip,
+                max_displacement,
+                relative_loc_hbr,
+                relative_loc_hbm,
+                percentage_x,
+                percentage_y,
+                theta_in_degree,
+            )
+        ),
+        columns=[
+            "clip",
+            "max_displacement_in_cm",
+            "relative_loc_hbr_in_cm",
+            "relative_loc_hbm_in_cm",
+            "percentage_x",
+            "percentage_y",
+            "theta_in_degree",
+        ],
     )
-    dis_df.to_csv("displacement.csv", index=False)
+    df_loc.to_csv("measurements.csv", index=False)
 

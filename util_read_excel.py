@@ -2,7 +2,7 @@ import pandas as pd
 
 
 class r_excel:
-    def __init__(self, folder, excel_name):
+    def __init__(self, excel_name):
         self.excel_file = excel_name
         self.df_excel = self.excel2df()
 

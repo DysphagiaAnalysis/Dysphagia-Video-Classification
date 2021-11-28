@@ -6,7 +6,7 @@ import pandas as pd
 
 
 data_dir = os.path.join(
-    os.path.abspath(os.getcwd()), "HB_Anno_E", "*", "annotations.xml",
+    os.path.abspath(os.getcwd()), "HB_Anno_A", "*", "annotations.xml",
 )
 data_file_names = glob.glob(data_dir)
 # for file_name in data_file_names:

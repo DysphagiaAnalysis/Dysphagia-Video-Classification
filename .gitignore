@@ -11,4 +11,6 @@ info_summary/E.xlsx
 info_summary/A_measurements.csv
 info_summary/D_measurements.csv
 info_summary/E_measurements.csv
+info_summary/temp.txt
+test.py
 __pycache__

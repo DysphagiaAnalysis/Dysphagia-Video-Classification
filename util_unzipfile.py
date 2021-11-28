@@ -4,7 +4,7 @@ import zipfile
 import glob
 
 # file_path = "./D07 Annotations/"
-data_dir = os.path.join(os.path.abspath(os.getcwd()), "HB_Anno_E", "*", "*.zip")
+data_dir = os.path.join(os.path.abspath(os.getcwd()), "HB_Anno_A", "*", "*.zip")
 data_file_names = glob.glob(data_dir)
 # for file_name in data_file_names:
 for exact_filepath in data_file_names:

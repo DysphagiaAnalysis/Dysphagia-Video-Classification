@@ -100,11 +100,11 @@ class loc:
 
 if __name__ == "__main__":
 
-    folder = "HB_Anno_E/"
-    excel_name = "info_summary/E.xlsx"
-    data_list = "info_summary/HB_list_E.txt"
+    folder = "HB_Anno_A/"
+    excel_name = "info_summary/A.xlsx"
+    data_list = "info_summary/temp.txt"
 
-    r = util_read_excel.r_excel(folder, excel_name)
+    r = util_read_excel.r_excel(excel_name)
     df = r.df_excel
 
     clip_names = []

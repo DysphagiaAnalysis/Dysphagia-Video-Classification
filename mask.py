@@ -8,10 +8,10 @@ import os
 
 class area:
     # DONE
-    def __init__(self, df_excel, clip_name):
+    def __init__(self, folder, df_excel, clip_name):
         self.c = util_read_excel.clip_info(df_excel, clip_name)
         # "data/task_a01_5ml-l0-5-2021_06_04_08_51_29-segmentation mask 1.1/SegmentationObject/"
-        data_dir = os.path.join(os.path.abspath(os.getcwd()), "E_data", "*")
+        data_dir = os.path.join(os.path.abspath(os.getcwd()), folder, "*")
         data_file_names = glob.glob(data_dir)
         self.clip_name = clip_name
         for i in range(len(data_file_names)):
@@ -71,11 +71,13 @@ class area:
 
 
 if __name__ == "__main__":
-    excel_name = "E.xlsx"
+
+    data_folder = "GH_Anno_E"
+    excel_name = "info_summary/E.xlsx"
+    data_list = "info_summary/temp.txt"
     r_e = util_read_excel.r_excel(excel_name)
 
     clip_names = []
-    data_list = "GH_E_list.txt"
     with open(data_list) as file:
         clip_names = file.readlines()
         clip_names = [clip.rstrip() for clip in clip_names]
@@ -84,7 +86,7 @@ if __name__ == "__main__":
 
         r_c = util_read_excel.clip_info(r_e.df_excel, clip_names[i])
 
-        a = area(r_e.df_excel, clip_names[i])
+        a = area(data_folder, r_e.df_excel, clip_names[i])
         ghr, ghm = (
             int(r_c.df_clip["GHR"].iloc[0]),
             int(r_c.df_clip["GHM"].iloc[0]),

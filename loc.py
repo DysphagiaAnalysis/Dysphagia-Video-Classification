@@ -77,7 +77,7 @@ class loc:
         if axis == "x":
             hbr_relative, hbm_relative = x_hbr - x_hbr_ref, x_hbm - x_hbm_ref
         elif axis == "y":
-            hbr_relative, hbm_relative = y_hbr - y_hbr_ref, y_hbm - y_hbm_ref
+            hbr_relative, hbm_relative = y_hbr_ref - y_hbr, y_hbm_ref - y_hbm
         return (hbr_relative - hbm_relative) / hbr_relative
 
     # DONE
@@ -93,16 +93,16 @@ class loc:
         x_hbr_ref, y_hbr_ref = float(loc_ref_hbr["x"]), float(loc_ref_hbr["y"])
         loc_ref_hbm = self.df_mandible.loc[self.df_mandible["frame"] == self.hbm]
         x_hbm_ref, y_hbm_ref = float(loc_ref_hbm["x"]), float(loc_ref_hbm["y"])
-        theta1 = math.atan((y_hbm - y_hbm_ref) / (x_hbm - x_hbm_ref)) * 180 / math.pi
-        theta2 = math.atan((y_hbr - y_hbr_ref) / (x_hbr - x_hbr_ref)) * 180 / math.pi
+        theta1 = math.atan((y_hbm_ref - y_hbm) / (x_hbm - x_hbm_ref)) * 180 / math.pi
+        theta2 = math.atan((y_hbr_ref - y_hbr) / (x_hbr - x_hbr_ref)) * 180 / math.pi
         return theta1 - theta2
 
 
 if __name__ == "__main__":
 
-    folder = "HB_Anno_D/"
-    excel_name = "D.xlsx"
-    data_list = "GH_list_D.txt"
+    folder = "HB_Anno_E/"
+    excel_name = "info_summary/E.xlsx"
+    data_list = "info_summary/HB_list_E.txt"
 
     r = util_read_excel.r_excel(folder, excel_name)
     df = r.df_excel

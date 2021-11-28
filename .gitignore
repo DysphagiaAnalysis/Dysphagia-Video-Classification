@@ -1,7 +1,14 @@
-data/
 data_test/
 GH_Anno_A/
 GH_Anno_D/
 GH_Anno_E/
 HB_Anno_D/
-__pycache__/
+HB_Anno_A/
+HB_Anno_E/
+info_summary/A.xlsx
+info_summary/D.xlsx
+info_summary/E.xlsx
+info_summary/A_measurements.csv
+info_summary/D_measurements.csv
+info_summary/E_measurements.csv
+__pycache__

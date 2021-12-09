@@ -1,5 +1,20 @@
 ## This project aims to classify patients with dysphagia with various machine learning and signal processing means.
 
+Extract Features from Hyoid Bone Annotations:
+- ARMA
+- HMM + EM
+
+Classfication with HB Features (noise as a regularization factor):
+- Logistic Regression 
+- SVM
+- K-Neighbours 
+- GMM
+
+Geniohyoid Muscle:
+- CNN to extract features
+- Preprocessing  videos to same length 
+- RNN for classification 
+
 ---
 
 #### Dataset can be found in [Grive](https://drive.google.com/drive/folders/1H-SQDsl4pZmKeGOX7-jT6g7k0b6zq0jY?usp=sharing), and metadata can be found in [info_summary](info_summary/).

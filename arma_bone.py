@@ -71,6 +71,8 @@ if __name__ == "__main__":
     # shuffle 
     index = [i for i in range(length)]
     random.shuffle(index)
+
+    # TODO: change y dimension with sequeeze 
     y = np.concatenate((np.zeros((NUM[0], 1)), np.ones((NUM[1], 1)), np.zeros((NUM[2], 1))), axis=0)
     y = np.array(y).astype('int32')
     
@@ -80,21 +82,10 @@ if __name__ == "__main__":
     # Start GMM-EM
     result = classfier.gmm_cluster(x, y, length)
     print(result)
-    # end GMM-EM
-
-    # Start SVR
-    # b = np.zeros((y.shape[1], 1 + 1))
-    # b[np.arange(y.shape[1]), y] = 1
-    # y = b
 
     acc = classfier.svm(x, y, length)
-
     print('---')
     print(acc)
-
-
-
-
 
 
 

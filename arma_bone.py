@@ -26,7 +26,7 @@ def claculate_arma_param(data, order,dimension):
         PHI_row = data_part[(i):(i+order), :]
         arr = PHI_row[::-1].transpose()
         PHI[i,:] = arr
-    inv = np.linalg.inv(np.dot(PHI.transpose(), PHI))
+    inv = np.linalg.pinv(np.dot(PHI.transpose(), PHI))
     theta = np.matmul(inv, PHI.transpose())
     theta = np.matmul(theta, Y_observe)
     return theta
@@ -54,7 +54,7 @@ if __name__ == "__main__":
         NUM.append(num)
 
     length = len(DATA)
-    order = 2
+    order = 3
     PARAM = np.zeros((length, 2*order))
     j = 0
     for i in range (length):
@@ -71,12 +71,12 @@ if __name__ == "__main__":
     index = [i for i in range(length)]
     random.shuffle(index)
 
-    # TODO: change y dimension with sequeeze 
     y = np.concatenate((np.zeros((NUM[0], 1)), np.ones((NUM[1], 1)), np.zeros((NUM[2], 1))), axis=0)
     y = np.array(y).astype('int32')
     
     x = PARAM[index, :]
     y = y[index, :]
+    y = np.squeeze(y)
 
     # Start GMM-EM
     result = classfier.gmm_cluster(x, y, length)
@@ -95,3 +95,4 @@ if __name__ == "__main__":
     print('knn')
     print(acc_knn)
 
+# looks like predictions tend to be 0 with arma features 

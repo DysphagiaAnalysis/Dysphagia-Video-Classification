@@ -4,7 +4,7 @@ import os
 import pandas as pd
 import numpy as np
 import random
-import classifier 
+from classifier import classifier 
 
 root =  os.path.join(os.getcwd(), 'Eigenvalue_Calc/');
 DATA = []
@@ -32,18 +32,20 @@ y = np.array(y).astype('int32')
 x = np.array(DATA).reshape(length, -1)[index, :]
 y = y[index]
 
-result = classifier.gmm_cluster(x, y, length)
+c = classifier(x, y, length)
+
+result = c.gmm_cluster()
 print('gmm')
 print(result)
 
-acc = classifier.svm(x, y, length)
+acc = c.svm()
 print('svm')
 print(acc)
 
-acc_logistic = classifier.logistic(x, y, length)
+acc_logistic = c.logistic()
 print('logistic')
 print(acc_logistic)
 
-acc_knn = classifier.knn(x, y, length)
+acc_knn = c.knn()
 print('knn')
 print(acc_knn)

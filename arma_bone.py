@@ -32,7 +32,7 @@ def claculate_arma_param(data, order,dimension):
     return theta
 
 
-import classfier 
+import classifier 
 if __name__ == "__main__":
 
     root =  os.path.join(os.getcwd(), 'data/');
@@ -78,20 +78,19 @@ if __name__ == "__main__":
     y = y[index, :]
     y = np.squeeze(y)
 
-    # Start GMM-EM
-    result = classfier.gmm_cluster(x, y, length)
+    result = classifier.gmm_cluster(x, y, length)
     print('gmm')
     print(result)
 
-    acc = classfier.svm(x, y, length)
+    acc = classifier.svm(x, y, length)
     print('svm')
     print(acc)
 
-    acc_logistic = classfier.logistic(x, y, length)
+    acc_logistic = classifier.logistic(x, y, length)
     print('logistic')
     print(acc_logistic)
 
-    acc_knn = classfier.knn(x, y, length)
+    acc_knn = classifier.knn(x, y, length)
     print('knn')
     print(acc_knn)
 

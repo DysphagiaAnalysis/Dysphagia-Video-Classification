@@ -11,8 +11,8 @@ Classfication with HB Features (noise as a regularization factor):
 - GMM
 
 Geniohyoid Muscle:
-- CNN to extract features
-- Preprocessing  videos to same length 
+- CNN to extract features from GH annotations 
+- Preprocessing videos to same length 
 - RNN for classification 
 
 ---

@@ -20,9 +20,15 @@ class loc:
         self.df_hb = self.get_HB()
         self.df_mandible = self.get_Mandible()
 
-        self.hbr, self.hbm = (
+        self.ss, self.se = (
+            int(self.c.df_clip["SS"].iloc[0]),
+            int(self.c.df_clip["SE"].iloc[0]),
+        )
+
+        self.hbr, self.hbm, self.hbo = (
             int(self.c.df_clip["HBR"].iloc[0]),
             int(self.c.df_clip["HBM"].iloc[0]),
+            int(self.c.df_clip["HBOS"].iloc[0]),
         )
 
     # DONE
@@ -102,7 +108,7 @@ if __name__ == "__main__":
 
     folder = "HB_Anno_A/"
     excel_name = "info_summary/A.xlsx"
-    data_list = "info_summary/temp.txt"
+    data_list = "info_summary/HB_list_A.txt"
 
     r = util_read_excel.r_excel(excel_name)
     df = r.df_excel
@@ -123,35 +129,35 @@ if __name__ == "__main__":
     for clip_name in clip_names:
         l = loc(folder, df, clip_name)
 
-        clip.append(clip_name)
-        max_displacement.append(l.cal_max_displacement())
-        relative_loc_hbr.append(l.cal_relative_loc())
-        relative_loc_hbm.append(l.cal_relative_loc(timestamp="hbm"))
-        percentage_x.append(l.cal_delta_percentage())
-        percentage_y.append(l.cal_delta_percentage(axis="y"))
-        theta_in_degree.append(l.cal_angle_in_degree())
+    #     clip.append(clip_name)
+    #     max_displacement.append(l.cal_max_displacement())
+    #     relative_loc_hbr.append(l.cal_relative_loc())
+    #     relative_loc_hbm.append(l.cal_relative_loc(timestamp="hbm"))
+    #     percentage_x.append(l.cal_delta_percentage())
+    #     percentage_y.append(l.cal_delta_percentage(axis="y"))
+    #     theta_in_degree.append(l.cal_angle_in_degree())
 
-    df_loc = pd.DataFrame(
-        list(
-            zip(
-                clip,
-                max_displacement,
-                relative_loc_hbr,
-                relative_loc_hbm,
-                percentage_x,
-                percentage_y,
-                theta_in_degree,
-            )
-        ),
-        columns=[
-            "clip",
-            "max_displacement_in_cm",
-            "relative_loc_hbr_in_cm",
-            "relative_loc_hbm_in_cm",
-            "percentage_x",
-            "percentage_y",
-            "theta_in_degree",
-        ],
-    )
-    df_loc.to_csv("measurements.csv", index=False)
+    # df_loc = pd.DataFrame(
+    #     list(
+    #         zip(
+    #             clip,
+    #             max_displacement,
+    #             relative_loc_hbr,
+    #             relative_loc_hbm,
+    #             percentage_x,
+    #             percentage_y,
+    #             theta_in_degree,
+    #         )
+    #     ),
+    #     columns=[
+    #         "clip",
+    #         "max_displacement_in_cm",
+    #         "relative_loc_hbr_in_cm",
+    #         "relative_loc_hbm_in_cm",
+    #         "percentage_x",
+    #         "percentage_y",
+    #         "theta_in_degree",
+    #     ],
+    # )
+    # df_loc.to_csv("measurements.csv", index=False)
 

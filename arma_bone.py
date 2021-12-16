@@ -1,6 +1,4 @@
 import numpy as np
-import util_read_excel
-import loc
 import os
 import pandas as pd
 from sklearn import preprocessing
@@ -68,6 +66,7 @@ if __name__ == "__main__":
         PARAM[j:j+1,:] = theta
         j = j + 1
 
+    # TODO: split data based on subject instead of clip
     # shuffle 
     index = [i for i in range(length)]
     random.shuffle(index)
@@ -81,30 +80,18 @@ if __name__ == "__main__":
 
     # Start GMM-EM
     result = classfier.gmm_cluster(x, y, length)
+    print('gmm')
     print(result)
 
     acc = classfier.svm(x, y, length)
-    print('---')
+    print('svm')
     print(acc)
 
+    acc_logistic = classfier.logistic(x, y, length)
+    print('logistic')
+    print(acc_logistic)
 
+    acc_knn = classfier.knn(x, y, length)
+    print('knn')
+    print(acc_knn)
 
-    # version 1
-    # DATA1 = DATA[0]
-    #
-    #
-    # folder_path = 'E:/PhD/Lectures/SSP/Project/data_test/'
-    # order = 5
-    # num = len(os.listdir(folder_path))
-    # PARAM = np.zeros((num, 2*order))
-    # j = 0
-    #
-    # for i in os.listdir(folder_path):
-    #     HB_CSV = folder_path + i
-    #     data = pd.read_csv(HB_CSV, header=0)
-    #     data1 = np.array(data)[:,1:]
-    #     theta_x = claculate_arma_param(data1, order, 0)
-    #     theta_y = claculate_arma_param(data1, order, 1)
-    #     theta = np.concatenate((theta_x, theta_y),axis=0).transpose()
-    #     PARAM[j:j+1,:] = theta
-    #     j = j + 1

@@ -1,14 +1,9 @@
 import numpy as np
-import util_read_excel
-import loc
 import os
 import pandas as pd
 from sklearn import preprocessing
-from sklearn.mixture import GaussianMixture as gmm
 import random
-from sklearn.svm import SVR
-from sklearn.pipeline import make_pipeline
-from sklearn.preprocessing import StandardScaler
+
 from sklearn.preprocessing import OneHotEncoder as onehot
 
 def claculate_arma_param(data, order,dimension):
@@ -37,33 +32,26 @@ def claculate_arma_param(data, order,dimension):
     return theta
 
 
-def gmm_cluster(data, cluster=2):
-
-    model = gmm(n_components=2, max_iter=500, n_init=1).fit(data)
-    cluster_mean = model.means_
-    classification_result = model.predict(data)
-    return classification_result
-
-
-
+import classfier 
 if __name__ == "__main__":
 
-    root = 'E:/PhD/Lectures/SSP/Project/data_position/'
+    root =  os.path.join(os.getcwd(), 'data/');
     DATA = []
     NUM = []
-    for i in os.listdir(root):
-        sub = root + i +'/'
-        for j in os.listdir(sub):
-            sub_sub = sub +j + '/'
-            num = 0
-            for k in os.listdir(sub_sub):
-                num = num + 1
-                sub_sub_sub = sub_sub + k +'/'
-                HB_CSV = sub_sub_sub + 'HB.csv'
-                data = pd.read_csv(HB_CSV, header=0)
-                data1 = np.array(data)[:, 1:]
-                DATA.append(data1)
-            NUM.append(num)
+    for j in os.listdir(root):
+        if j == '.DS_Store':
+            continue
+        sub_sub = root +j + '/'
+        num = 0
+        for k in os.listdir(sub_sub):
+            if k == '.DS_Store':
+                continue
+            num = num + 1
+            sub_sub_sub = sub_sub + k 
+            data = pd.read_csv(sub_sub_sub, header=0)
+            data1 = np.array(data)[:, 1:]
+            DATA.append(data1)
+        NUM.append(num)
 
     length = len(DATA)
     order = 2
@@ -78,76 +66,32 @@ if __name__ == "__main__":
         PARAM[j:j+1,:] = theta
         j = j + 1
 
-
-    # Start GMM-EM
-    result = gmm_cluster(PARAM, cluster=2)
-    result = result.reshape(1,length)
-
-    p1 = np.zeros((1, NUM[0]+NUM[1]))
-    p2 = np.ones((1,NUM[2]))
-    p = np.concatenate((p1,p2),axis=1)
-
-    t = np.where(p == result)
-    mm = len(t[1])
-    accuracy1 = mm / length
-
-    print(result)
-    print(accuracy1)
-    print(1-accuracy1)
-    # end GMM-EM
-
-
-
-    # Start SVR
+    # TODO: split data based on subject instead of clip
+    # shuffle 
     index = [i for i in range(length)]
     random.shuffle(index)
-    y = np.concatenate((np.zeros((1, NUM[0]+NUM[1])), np.ones((1,NUM[2]))), axis=1)
+
+    # TODO: change y dimension with sequeeze 
+    y = np.concatenate((np.zeros((NUM[0], 1)), np.ones((NUM[1], 1)), np.zeros((NUM[2], 1))), axis=0)
     y = np.array(y).astype('int32')
-    y = y.transpose()
-    # b = np.zeros((y.shape[1], 1 + 1))
-    # b[np.arange(y.shape[1]), y] = 1
-    # y = b
+    
     x = PARAM[index, :]
     y = y[index, :]
-    num1 = 60
-    train_x = x[0:num1, :]
-    test_x = x[num1:, :]
-    train_y = y[0:num1, :]
-    test_y = y[num1:, :]
 
-    regr = make_pipeline(StandardScaler(), SVR(kernel='linear', C=0.0001, epsilon=0.02))
-    regr.fit(train_x, train_y)
-    y_hat = regr.predict(test_x)
-    y_predict = np.round(y_hat).reshape(length-num1,1)
-    num = np.sum(test_y == y_predict)
-    acc = num/test_y.shape[0]
+    # Start GMM-EM
+    result = classfier.gmm_cluster(x, y, length)
+    print('gmm')
+    print(result)
+
+    acc = classfier.svm(x, y, length)
+    print('svm')
     print(acc)
 
-    # End SVR
+    acc_logistic = classfier.logistic(x, y, length)
+    print('logistic')
+    print(acc_logistic)
 
+    acc_knn = classfier.knn(x, y, length)
+    print('knn')
+    print(acc_knn)
 
-
-
-
-
-
-
-    # version 1
-    # DATA1 = DATA[0]
-    #
-    #
-    # folder_path = 'E:/PhD/Lectures/SSP/Project/data_test/'
-    # order = 5
-    # num = len(os.listdir(folder_path))
-    # PARAM = np.zeros((num, 2*order))
-    # j = 0
-    #
-    # for i in os.listdir(folder_path):
-    #     HB_CSV = folder_path + i
-    #     data = pd.read_csv(HB_CSV, header=0)
-    #     data1 = np.array(data)[:,1:]
-    #     theta_x = claculate_arma_param(data1, order, 0)
-    #     theta_y = claculate_arma_param(data1, order, 1)
-    #     theta = np.concatenate((theta_x, theta_y),axis=0).transpose()
-    #     PARAM[j:j+1,:] = theta
-    #     j = j + 1

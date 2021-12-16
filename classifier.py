@@ -5,7 +5,9 @@ from sklearn.mixture import GaussianMixture as gmm
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import LinearSVC
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, plot_roc_curve
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+from sklearn.metrics import auc, roc_curve, RocCurveDisplay
+from sklearn.metrics import PrecisionRecallDisplay
 import matplotlib.pyplot as plt
 import os
 
@@ -38,6 +40,7 @@ class classifier:
         y_hat = knn.predict(self.test_X)
         acc = np.sum(self.test_y == y_hat)/self.test_y.shape[0]
         self.cm_plot(knn, self.test_y, y_hat, 'knn')
+        self.roc(self.test_y, y_hat, 'knn')
         return acc
 
     # label might be wrong, 0/1?
@@ -47,6 +50,7 @@ class classifier:
         y_hat = svm.predict(self.test_X)
         acc =  np.sum(self.test_y == y_hat)/self.test_y.shape[0]
         self.cm_plot(svm, self.test_y, y_hat, 'svm')
+        self.roc(self.test_y, y_hat, 'svm')
         return acc
 
     def logistic(self):
@@ -55,6 +59,7 @@ class classifier:
         y_hat = lr.predict(self.test_X)
         acc = np.sum(self.test_y == y_hat)/self.test_y.shape[0]
         self.cm_plot(lr, self.test_y, y_hat, 'logistic')
+        self.roc(self.test_y, y_hat, 'logistic')
         return acc
 
     def cm_plot(self, clf, y_test, y_hat, name):
@@ -63,5 +68,9 @@ class classifier:
         disp.plot()
         plt.savefig(os.path.join('plots', name + '.png'))
     
-    def roc(self):
-        pass
+    def roc(self, y_test, y_hat, name):
+        fpr, tpr, thresholds = roc_curve(y_test, y_hat)
+        roc_auc = auc(fpr, tpr)
+        display = RocCurveDisplay(fpr=fpr, tpr=tpr, roc_auc=roc_auc, estimator_name=name)
+        display.plot()
+        plt.savefig(os.path.join('plots', 'roc_' + name + '.png'))

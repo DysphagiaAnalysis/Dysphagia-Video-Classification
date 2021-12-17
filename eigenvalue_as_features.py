@@ -32,7 +32,7 @@ y = np.array(y).astype('int32')
 x = np.array(DATA).reshape(length, -1)[index, :]
 y = y[index]
 
-c = classifier(x, y, length)
+c = classifier(x, y, length, 'hmm')
 
 result = c.gmm_cluster()
 print('gmm')

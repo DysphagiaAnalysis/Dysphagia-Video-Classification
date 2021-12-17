@@ -14,10 +14,11 @@ import os
  # TODO: split data based on subject instead of clip
 
 class classifier:
-    def __init__(self, x, y, length, train_percentage = 0.6):
+    def __init__(self, x, y, length, feature_extractor, train_percentage = 0.6):
         self.X = x
         self.y = y
         self.length = length
+        self.feature_extrator = feature_extractor
         num1 = int(length*train_percentage)
         self.train_X = self.X[0:num1, :]
         self.test_X = self.X[num1:, :]
@@ -31,8 +32,10 @@ class classifier:
         cluster_mean = model.means_
         result = model.predict(self.X)
 
-        accuracy1 = sum(self.y == result) / self.length
-        return accuracy1
+        acc = sum(self.y == result) / self.length
+        #self.cm_plot(model, self.y, result, 'gmm')
+        #self.roc(self.y, result, 'knn')
+        return acc
 
     def knn(self):
         knn = KNeighborsClassifier(n_neighbors=4)
@@ -69,11 +72,11 @@ class classifier:
         cm = confusion_matrix(y_test, y_hat, labels=clf.classes_)
         disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=clf.classes_)
         disp.plot()
-        plt.savefig(os.path.join('plots', 'cm_'+name + '.png'))
+        plt.savefig(os.path.join('plots', self.feature_extrator + '_cm_'+name + '.png'))
     
     def roc(self, y_test, y_hat, name):
         fpr, tpr, thresholds = roc_curve(y_test, y_hat)
         roc_auc = auc(fpr, tpr)
         display = RocCurveDisplay(fpr=fpr, tpr=tpr, roc_auc=roc_auc, estimator_name=name)
         display.plot()
-        plt.savefig(os.path.join('plots', 'roc_' + name + '.png'))
+        plt.savefig(os.path.join('plots', self.feature_extrator +'_roc_' + name + '.png'))

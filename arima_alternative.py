@@ -44,7 +44,7 @@ x = PARAM[index, :]
 y = y[index, :]
 y = np.squeeze(y)
 
-c = classifier(x, y, length)
+c = classifier(x, y, length, 'arima312')
 
 result = c.gmm_cluster()
 print('gmm')

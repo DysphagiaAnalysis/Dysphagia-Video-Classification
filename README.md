@@ -1,19 +1,18 @@
 ## This project aims to classify patients with dysphagia with various machine learning and signal processing means.
 
-Extract Features from Hyoid Bone Annotations:
-- ARMA
-- HMM + EM
+Extract Features from Hyoid Bone Location Annotations:
+- ARMA [(code)](arima_alternative.py)
+- HMM + EM [(code)](Read_in_Data.m)
 
-Classfication with HB Features (noise as a regularization factor):
+Classfication with HB Features [(code)](arima_alternative.py):
 - Logistic Regression 
 - SVM
 - K-Neighbours 
 - GMM
 
-Geniohyoid Muscle:
-- CNN to extract features from GH annotations 
-- Preprocessing videos to same length 
-- RNN for classification 
+Geniohyoid Muscle Classification [(code)](DL_classification/):
+- CNN to extract features from GH mask annotations 
+- LSTM for classification 
 
 ---
 

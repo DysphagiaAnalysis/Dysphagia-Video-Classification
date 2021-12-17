@@ -16,13 +16,19 @@ Geniohyoid Muscle Classification [(code)](DL_classification/):
 
 ---
 
+
 #### Dataset can be found in [GDrive](https://drive.google.com/drive/folders/1H-SQDsl4pZmKeGOX7-jT6g7k0b6zq0jY?usp=sharing), and metadata can be found in [info_summary](info_summary/), data cleaning code segments can be found in [utils](utils/).
+
 
 - ~ 240 swallow ultrasound clips from healthy adults, healthy elderly, dysphagia patients;
 
 - each from 100 - 600 frames, with a size of 1068 \* 800 pixels^2;
 
 - genihyoid muscle annotations, hyoid bone annotations, and swallowing event timestamp included.
+
+#### Well-trainde model file can be found in [Gdrive](https://drive.google.com/drive/folders/1TYC-xw1FBAKHbZ_Lz8RCwMIO7g0TN7m_)
+- File name indicates the number of BCU's used in CNNs-LSTM models
+- Please feel free to contact me via xinhuiyu@student.ubc.ca if you have any questions regarding this part.
 
 #### Data authorship acknowledgments:
 

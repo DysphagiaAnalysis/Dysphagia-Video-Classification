@@ -1,6 +1,4 @@
-"""
-A collection of models we'll use to attempt to classify videos.
-"""
+
 from keras.layers import Dense, Flatten, Dropout, ZeroPadding3D
 from keras.layers import *
 from keras.layers.recurrent import LSTM
@@ -15,17 +13,6 @@ import sys
 class ResearchModels():
     def __init__(self, nb_classes, model, seq_length,
                  saved_model=None, features_length=2048):
-        """
-        `model` = one of:
-            lstm
-            lrcn
-            mlp
-            conv_3d
-            c3d
-        `nb_classes` = the number of classes to predict
-        `seq_length` = the length of our video sequences
-        `saved_model` = the path to a saved Keras model to load
-        """
 
         # Set defaults.
         self.seq_length = seq_length
@@ -49,7 +36,7 @@ class ResearchModels():
             self.model = self.lstm()
         elif model == 'lrcn':
             print("Loading CNN-LSTM model.")
-            self.input_shape = (seq_length, 256, 256, 3)
+            self.input_shape = (seq_length, 128, 128, 3)
             self.model = self.lrcn()
         elif model == 'mlp':
             print("Loading simple MLP.")
@@ -76,9 +63,7 @@ class ResearchModels():
         print(self.model.summary())
 
     def lstm(self):
-        """Build a simple LSTM network. We pass the extracted features from
-        our CNN to this model predomenently."""
-        # Model.
+
         model = Sequential()
         model.add(LSTM(2048, return_sequences=False,
                        input_shape=self.input_shape,
@@ -90,17 +75,7 @@ class ResearchModels():
         return model
 
     def lrcn(self):
-        """Build a CNN into RNN.
-        Starting version from:
-            https://github.com/udacity/self-driving-car/blob/master/
-                steering-models/community-models/chauffeur/models.py
 
-        Heavily influenced by VGG-16:
-            https://arxiv.org/abs/1409.1556
-
-        Also known as an LRCN:
-            https://arxiv.org/pdf/1411.4389.pdf
-        """
         def add_default_block(model, kernel_filters, init, reg_lambda):
 
             # conv
@@ -138,19 +113,18 @@ class ResearchModels():
         # 2nd-5th (default) blocks
         model = add_default_block(model, 64,  init=initialiser, reg_lambda=reg_lambda)
         model = add_default_block(model, 128, init=initialiser, reg_lambda=reg_lambda)
-        model = add_default_block(model, 256, init=initialiser, reg_lambda=reg_lambda)
-        model = add_default_block(model, 512, init=initialiser, reg_lambda=reg_lambda)
+        # model = add_default_block(model, 256, init=initialiser, reg_lambda=reg_lambda)
+        # model = add_default_block(model, 512, init=initialiser, reg_lambda=reg_lambda)
 
         # LSTM output head
         model.add(TimeDistributed(Flatten()))
         model.add(LSTM(256, return_sequences=False, dropout=0.5))
-        model.add(Dense(self.nb_classes, activation='softmax'))
+        model.add(Dense(self.nb_classes, activation='sigmoid'))
 
         return model
 
     def mlp(self):
-        """Build a simple MLP. It uses extracted features as the input
-        because of the otherwise too-high dimensionality."""
+
         # Model.
         model = Sequential()
         model.add(Flatten(input_shape=self.input_shape))
@@ -163,10 +137,7 @@ class ResearchModels():
         return model
 
     def conv_3d(self):
-        """
-        Build a 3D convolutional network, based loosely on C3D.
-            https://arxiv.org/pdf/1412.0767.pdf
-        """
+
         # Model.
         model = Sequential()
         model.add(Conv3D(
@@ -192,13 +163,7 @@ class ResearchModels():
         return model
 
     def c3d(self):
-        """
-        Build a 3D convolutional network, aka C3D.
-            https://arxiv.org/pdf/1412.0767.pdf
 
-        With thanks:
-            https://gist.github.com/albertomontesg/d8b21a179c1e6cca0480ebdf292c34d2
-        """
         model = Sequential()
         # 1st layer group
         model.add(Conv3D(64, 3, 3, 3, activation='relu',

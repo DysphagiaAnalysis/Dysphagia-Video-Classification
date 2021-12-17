@@ -17,7 +17,7 @@ def train(model_name,
           Y_val):
 
     root = 'E:/PhD/Lectures/SSP/Project/checkpoint/'
-    checkpointer = ModelCheckpoint(filepath='model_frame50_size256.hdf5',
+    checkpointer = ModelCheckpoint(filepath= root + 'model_frame50_size128_depth3.hdf5',
                                    monitor='loss',
                                    verbose=1,
                                    save_best_only=True)
@@ -47,7 +47,7 @@ def train(model_name,
 
     train_steps_per_epoch = np.int(len(train_video_list)//batch_size)
     val_steps_per_epoch = np.int(len(val_video_list)//1)
-    model = ResearchModels(2, model_name,selected_frame_num)
+    model = ResearchModels(1, model_name,selected_frame_num)
 
     history = model.model.fit_generator(generator=train_generator,
                     steps_per_epoch=train_steps_per_epoch,
@@ -83,7 +83,7 @@ def main():
     # train_sample_list = li[0:train_sample_num]
     # val_sample_list = li[train_sample_num:length]
 
-    train_sample_list = [0, 2, 3, 4, 6, 8, 9, 11, 12, 14, 15]
+    train_sample_list = [14, 15, 0, 2, 11, 14, 3, 12, 4, 6, 12, 15, 8, 9, 14, 12]
     val_sample_list = [1, 5, 7, 10, 13, 16]
 
 
@@ -107,9 +107,9 @@ def main():
         for k in range(num_video_of_tester):
 
             if tester_label == '1':  # unhealthy
-                Y_train.append([0, 1])
+                Y_train.append([1])
             else:
-                Y_train.append([1, 0])
+                Y_train.append([0])
 
     Y_train = np.array(Y_train)
     del num_video_of_tester
@@ -131,9 +131,9 @@ def main():
         for k in range(num_video_of_tester):
 
             if tester_label == '1':  # unhealthy
-                Y_val.append([0, 1])
+                Y_val.append([1])
             else:
-                Y_val.append([1, 0])
+                Y_val.append([0])
     Y_val = np.array(Y_val)
 
 

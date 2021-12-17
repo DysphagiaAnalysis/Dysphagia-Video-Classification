@@ -1,4 +1,4 @@
-## This project aims to classify patients with dysphagia with various machine learning and signal processing means.
+## This project aims to classify patients with dysphagia with various machine learning and signal processing methods.
 
 Extract Features from Hyoid Bone Location Annotations:
 - ARMA [(code)](arima_alternative.py)

@@ -16,7 +16,7 @@ Geniohyoid Muscle Classification [(code)](DL_classification/):
 
 ---
 
-#### Dataset can be found in [Grive](https://drive.google.com/drive/folders/1H-SQDsl4pZmKeGOX7-jT6g7k0b6zq0jY?usp=sharing), and metadata can be found in [info_summary](info_summary/).
+#### Dataset can be found in [GDrive](https://drive.google.com/drive/folders/1H-SQDsl4pZmKeGOX7-jT6g7k0b6zq0jY?usp=sharing), and metadata can be found in [info_summary](info_summary/).
 
 - ~ 240 swallow ultrasound clips from healthy adults, healthy elderly, dysphagia patients;
 

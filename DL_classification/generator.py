@@ -1,7 +1,8 @@
 import os
 from PIL import Image
 import numpy as np
-from util_read_excel import r_excel, clip_info
+# from ..utils import util_read_excel
+# ..utils.util_read_excel import r_excel, clip_info
 
 
 
@@ -45,7 +46,7 @@ def data_generator(batch_size, selected_frame_num, file_name_list, video_list,Y_
                             im = Image.open(absolute_path)
                             left = 400; right = 750; top = 500; bottom = 750
                             im_crop = im.crop((left, top, right, bottom))
-                            im_crop = im_crop.resize((256, 256), Image.BILINEAR)
+                            im_crop = im_crop.resize((128, 128), Image.BILINEAR)
                             im_array = np.asarray(im_crop)
                             images.append(im_array)
                             frame_num = frame_num + 1

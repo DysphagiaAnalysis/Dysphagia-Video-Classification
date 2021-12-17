@@ -17,7 +17,7 @@ Geniohyoid Muscle:
 
 ---
 
-#### Dataset can be found in [Grive](https://drive.google.com/drive/folders/1H-SQDsl4pZmKeGOX7-jT6g7k0b6zq0jY?usp=sharing), and metadata can be found in [info_summary](info_summary/).
+#### Dataset can be found in [Gdrive](https://drive.google.com/drive/folders/1H-SQDsl4pZmKeGOX7-jT6g7k0b6zq0jY?usp=sharing), and metadata can be found in [info_summary](info_summary/).
 
 - ~ 240 swallow ultrasound clips from healthy adults, healthy elderly, dysphagia patients;
 
@@ -25,8 +25,8 @@ Geniohyoid Muscle:
 
 - genihyoid muscle annotations, hyoid bone annotations, and swallowing event timestamp included.
 
-#### Well-trainde model file can be found in [Grive](https://drive.google.com/drive/folders/1TYC-xw1FBAKHbZ_Lz8RCwMIO7g0TN7m_)
-- File name indicates the number of BCU's used in RNNs-LSTM models
+#### Well-trainde model file can be found in [Gdrive](https://drive.google.com/drive/folders/1TYC-xw1FBAKHbZ_Lz8RCwMIO7g0TN7m_)
+- File name indicates the number of BCU's used in CNNs-LSTM models
 - Please feel free to contact me via xinhuiyu@student.ubc.ca if you have any questions regarding this part.
 
 #### Data authorship acknowledgments:

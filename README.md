@@ -26,6 +26,7 @@ Geniohyoid Muscle:
 - genihyoid muscle annotations, hyoid bone annotations, and swallowing event timestamp included.
 
 #### Well-trainde model file can be found in [Grive](https://drive.google.com/drive/folders/1TYC-xw1FBAKHbZ_Lz8RCwMIO7g0TN7m_)
+- ~ File name indicates the number of BCU's used in RNNs-LSTM models
 
 #### Data authorship acknowledgments:
 

@@ -12,7 +12,6 @@ import matplotlib.pyplot as plt
 import os
 
  # TODO: split data based on subject instead of clip
- # TODO: ROC and confusion matrix
 
 class classifier:
     def __init__(self, x, y, length, train_percentage = 0.6):
@@ -24,6 +23,7 @@ class classifier:
         self.test_X = self.X[num1:, :]
         self.train_y = self.y[0:num1]
         self.test_y = self.y[num1:]
+        print(self.test_y)
 
     def gmm_cluster(self, cluster=2):
         
@@ -38,6 +38,7 @@ class classifier:
         knn = KNeighborsClassifier(n_neighbors=4)
         knn.fit(self.train_X, self.train_y)
         y_hat = knn.predict(self.test_X)
+        print(y_hat)
         acc = np.sum(self.test_y == y_hat)/self.test_y.shape[0]
         self.cm_plot(knn, self.test_y, y_hat, 'knn')
         self.roc(self.test_y, y_hat, 'knn')
@@ -48,6 +49,7 @@ class classifier:
         svm = make_pipeline(StandardScaler(), LinearSVC())
         svm.fit(self.train_X, self.train_y)
         y_hat = svm.predict(self.test_X)
+        print(y_hat)
         acc =  np.sum(self.test_y == y_hat)/self.test_y.shape[0]
         self.cm_plot(svm, self.test_y, y_hat, 'svm')
         self.roc(self.test_y, y_hat, 'svm')
@@ -57,6 +59,7 @@ class classifier:
         lr = LogisticRegression(solver='newton-cg')
         lr.fit(self.train_X, self.train_y)
         y_hat = lr.predict(self.test_X)
+        print(y_hat)
         acc = np.sum(self.test_y == y_hat)/self.test_y.shape[0]
         self.cm_plot(lr, self.test_y, y_hat, 'logistic')
         self.roc(self.test_y, y_hat, 'logistic')
@@ -66,7 +69,7 @@ class classifier:
         cm = confusion_matrix(y_test, y_hat, labels=clf.classes_)
         disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=clf.classes_)
         disp.plot()
-        plt.savefig(os.path.join('plots', name + '.png'))
+        plt.savefig(os.path.join('plots', 'cm_'+name + '.png'))
     
     def roc(self, y_test, y_hat, name):
         fpr, tpr, thresholds = roc_curve(y_test, y_hat)

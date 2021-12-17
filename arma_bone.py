@@ -49,7 +49,7 @@ if __name__ == "__main__":
             num = num + 1
             sub_sub_sub = sub_sub + k 
             data = pd.read_csv(sub_sub_sub, header=0)
-            data1 = np.array(data)[:, 1:]
+            data1 = np.array(data)[:, 2:]
             DATA.append(data1)
         NUM.append(num)
 

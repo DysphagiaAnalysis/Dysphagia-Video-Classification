@@ -25,13 +25,13 @@ Geniohyoid Muscle Classification [(code)](DL_classification/):
 
 - genihyoid muscle annotations, hyoid bone annotations, and swallowing event timestamp included.
 
-#### Well-trained model file can be found in [GDrive](https://drive.google.com/drive/folders/1TYC-xw1FBAKHbZ_Lz8RCwMIO7g0TN7m_)
+#### Well-trained models can be found in [GDrive](https://drive.google.com/drive/folders/1TYC-xw1FBAKHbZ_Lz8RCwMIO7g0TN7m_)
 
 - File name indicates the number of BCU's used in CNNs-LSTM models
 
-- Please feel free to contact xinhuiyu at student dot ubc dot ca if you have any questions regarding this part.
+- Please feel free to contact Xinhui Yu via xinhuiyu at student dot ubc dot ca if you have any questions regarding this part.
 
-#### Data authorship acknowledgments:
+#### Data authorship acknowledgments
 
 - collected by Huberta Chan;
 

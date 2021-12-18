@@ -29,7 +29,7 @@ Geniohyoid Muscle Classification [(code)](DL_classification/):
 
 - File name indicates the number of BCU's used in CNNs-LSTM models
 
-- Please feel free to contact xinhuiyu@student.ubc.ca if you have any questions regarding this part.
+- Please feel free to contact xinhuiyu at student dot ubc dot ca if you have any questions regarding this part.
 
 #### Data authorship acknowledgments:
 
